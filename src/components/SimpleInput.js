@@ -8,7 +8,20 @@ const SimpleInput = (props) => {
 
   const nameInputChangeHandler = (event) => {
     setEnteredName(event.target.value);
-  }
+
+    // wanna use event.target.value INSTEAD of enteredName b/c there is a lag in state-update w/ enteredName
+    if (event.target.value.trim() !== '') {
+      setEnteredNameIsValid(true);
+    }
+  };
+
+  const nameInputBlurHandler = (event) => {
+    setEnteredNameTouched(true);
+
+    if (enteredName.trim() === '') {
+      setEnteredNameIsValid(false);
+    }
+  };
 
   const formSubmissionHandler = event => {
     event.preventDefault();
@@ -36,7 +49,14 @@ const SimpleInput = (props) => {
     <form onSubmit={formSubmissionHandler}>
       <div className={nameInputClasses}>
         <label htmlFor='name'>Your Name</label>
-        <input ref={nameInputRef} type='text' id='name' value={enteredName} onChange={nameInputChangeHandler} />
+        <input 
+          ref={nameInputRef} 
+          type='text' 
+          id='name' 
+          value={enteredName} 
+          onChange={nameInputChangeHandler} 
+          onBlur={nameInputBlurHandler} 
+        />
         {nameInputIsInvalid && <p className="error-text">Name must not be empty.</p>}
       </div>
       <div className="form-actions">
